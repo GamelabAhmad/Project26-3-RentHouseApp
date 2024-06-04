@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-secondary;
+}
+
+.landing-page::before {
+  content: "";
+  background-image: url("./public/img/house-landingpage-final.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.text-shadow {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.cari-rumah-button:hover {
+  background-color: #fafafa;
+  color: #0e1525;
+  transform: rotate(-3.2deg);
+  transform-origin: center;
+}
