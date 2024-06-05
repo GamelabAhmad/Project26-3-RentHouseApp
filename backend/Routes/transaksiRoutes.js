@@ -5,6 +5,6 @@ const transaksiController = require('../Controller/transaksiController');
 router.get('/', transaksiController.getAllTransaksiPending);
 router.get('/users/:id', transaksiController.getTransaksiByIdUser);
 router.post('/', transaksiController.createTransaksi);
-router.put('/kosts/:id', transaksiController.updateTransaksi);
+router.put('/:id', transaksiController.updateTransaksi);
 
 module.exports = router;

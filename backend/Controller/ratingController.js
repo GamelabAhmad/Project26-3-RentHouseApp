@@ -48,7 +48,46 @@ const getRatingByKostId = async (req, res) => {
   }
 };
 
+const getRatingByUserId = async (req, res) => {
+  const id = jwt.decode(req.cookies.token).id;
+  try {
+    const rating = await Rating.findAll({
+      where: { id_user: id },
+      include: [{ model: Kost, attributes: ['id', 'nama_kost'] }],
+    });
+    res.status(200).json(rating);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const updateRating = async (req, res) => {
+  const { id } = req.params;
+  const { rating, review } = req.body;
+  const id_user = jwt.decode(req.cookies.token).id;
+  try {
+    const ratingUser = await Rating.findOne({
+      where: { id: id, id_user: id_user },
+      include: [{ model: Kost, attributes: ['id', 'nama_kost'] }],
+    });
+
+    if (!ratingUser) {
+      return res.status(404).json({ message: 'Rating not found' });
+    }
+
+    ratingUser.rating = rating || ratingUser.rating;
+    ratingUser.review = review || ratingUser.review;
+    await ratingUser.save();
+
+    res.status(200).json(ratingUser);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createRating,
   getRatingByKostId,
+  getRatingByUserId,
+  updateRating,
 };
