@@ -39,6 +39,6 @@ const Transaksi = db.define(
 );
 
 Transaksi.belongsTo(Kost, { as: 'kost', foreignKey: 'id_kost' });
-Transaksi.belongsTo(User, { as: 'riwayat_transaksi', foreignKey: 'id_user' });
+Transaksi.belongsTo(User, { as: 'pembayar', foreignKey: 'id_user' });
 
 module.exports = Transaksi;
