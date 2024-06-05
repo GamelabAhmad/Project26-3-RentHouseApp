@@ -3,7 +3,11 @@ import { FaShoppingBag } from "react-icons/fa";
 import { IoIosLogIn } from "react-icons/io";
 import { NavLink } from "react-router-dom";
 
-export default function Navbar() {
+const Navbar = ({ hideNavbar }) => {
+  if (hideNavbar) {
+    return null; // Jika hideNavbar bernilai true, maka navbar tidak akan ditampilkan
+  }
+
   return (
     <nav className="bg-forest sticky top-0 font-spartan shadow">
       <div className="container mx-auto px-4 py-2 flex items-center justify-between">
@@ -39,4 +43,6 @@ export default function Navbar() {
       </div>
     </nav>
   );
-}
+};
+
+export default Navbar;
