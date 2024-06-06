@@ -7,8 +7,8 @@ import Footer from "./components/Footer";
 function App() {
   return (
     <div className="h-[2000px]">
-      <Navbar />
       <LandingPage />
+      <Navbar />
       <AboutRentHouse />
       <ProductSection />
       <Footer />

@@ -7,7 +7,7 @@ const Footer = () => {
       <footer className="bg-forest py-12">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-y-8 md:gap-y-0 md:gap-x-8">
-            <div className="text-white text-center md:text-left">
+            <div className="text-white text-center md:text-left font-legacy">
               <h2 className="text-soft-yellow text-3xl font-bold mb-4">
                 Rent House Indonesia
               </h2>
@@ -18,7 +18,7 @@ const Footer = () => {
                 Hubungi kami jika Anda membutuhkan bantuan lebih lanjut.
               </p>
             </div>
-            <div className="text-white">
+            <div className="text-white font-legacy">
               <h3 className="text-lg font-bold mb-4">Menu</h3>
               <ul>
                 <li>
@@ -43,7 +43,7 @@ const Footer = () => {
                 </li>
               </ul>
             </div>
-            <div className="text-white">
+            <div className="text-white font-legacy">
               <h3 className="text-lg font-bold mb-4">Resources</h3>
               <ul>
                 <li>
@@ -68,7 +68,7 @@ const Footer = () => {
                 </li>
               </ul>
             </div>
-            <div className="text-white">
+            <div className="text-white font-legacy">
               <h3 className="text-lg font-bold mb-4">Follow Us</h3>
               <div className="flex flex-col items-center md:items-start md:flex-row space-y-2 md:space-y-0 md:space-x-4">
                 <a href="#" className="text-lg hover:text-gray-300">
@@ -87,7 +87,7 @@ const Footer = () => {
             </div>
           </div>
           <hr className="border-white my-8" />
-          <div className="text-white text-center">
+          <div className="text-white text-center font-legacy">
             <p>
               &copy; {new Date().getFullYear()} Rent House Indonesia. All rights
               reserved.
