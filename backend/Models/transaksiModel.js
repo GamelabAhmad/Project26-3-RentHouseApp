@@ -23,12 +23,9 @@ const Transaksi = db.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    tanggal_bayar: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
     status: {
-      type: DataTypes.ENUM('pending', 'accepted', 'rejected'),
+      type: DataTypes.ENUM('pending', 'accepted'),
+      defaultValue: 'pending',
       allowNull: false,
     },
     dibayarkan_oleh: {
@@ -38,11 +35,10 @@ const Transaksi = db.define(
   },
   {
     freezeTableName: true,
-    createdAt: false,
   }
 );
 
 Transaksi.belongsTo(Kost, { as: 'kost', foreignKey: 'id_kost' });
-Transaksi.belongsTo(User, { as: 'riwayat_transaksi', foreignKey: 'id_user' });
+Transaksi.belongsTo(User, { as: 'pembayar', foreignKey: 'id_user' });
 
 module.exports = Transaksi;
