@@ -7,6 +7,7 @@ const transaksiRoutes = require('./Routes/transaksiRoutes');
 const Rating = require('./Models/ratingModel');
 const ratingRoutes = require('./Routes/ratingRoutes');
 const Transaksi = require('./Models/transaksiModel');
+const { Kost, detailKost } = require('./Models/kostModel');
 const app = express();
 
 app.use(express.json());
@@ -21,9 +22,12 @@ app.use('/api/rating', ratingRoutes);
 
 app.listen(4000, () => {
   console.log('Server is running on port 3000');
+
   // User.sync({ alter: true });
-  Rating.sync({ alter: true });
-  Transaksi.sync({ alter: true });
+  // Kost.sync({ alter: true });
+  // detailKost.sync({ alter: true });
+  // Transaksi.sync({ alter: true });
+  // Rating.sync({ alter: true });
 });
 
 module.exports = app;
