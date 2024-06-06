@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "./Navbar"; // Sesuaikan dengan path file Navbar
+import Navbar from "./Navbar";
 
 const ProductSection = () => {
   return (
@@ -10,7 +10,7 @@ const ProductSection = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {/* Produk Sewa Rumah 1 */}
             <div className="bg-white shadow-md rounded-lg overflow-hidden relative flex flex-col product-card mt-16">
-              <div className="absolute top-0 left-0 bg-[#FAEB98] text-[#0E1525] px-4 py-2 rounded-md text-sm font-bold">
+              <div className="absolute top-0 left-0 bg-[#FAEB98] text-[#0E1525] px-4 py-2 rounded-md text-sm font-bold font-legacy">
                 Rp 2.500.000 / bulan
               </div>
               <div className="h-40 overflow-hidden">
@@ -20,15 +20,15 @@ const ProductSection = () => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="p-4 flex-grow product-card-content">
-                <h2 className="text-lg font-bold text-gray-800">
+              <div className="p-4 flex-grow product-card-content font-legacy">
+                <h2 className="text-lg font-bold text-gray-800 font-legacy">
                   Rumah Keluarga Indah
                 </h2>
-                <p className="text-gray-600 mt-2 text-sm">
+                <p className="text-gray-600 mt-2 text-sm font-legacy">
                   Dengan desain modern dan ruang luas, Rumah Modern Mewah
                   menawarkan gaya hidup mewah bagi penghuninya
                 </p>
-                <div className="mt-2 flex items-center text-sm">
+                <div className="mt-2 flex items-center text-sm font-legacy">
                   <svg
                     className="w-4 h-4 text-gray-500 mr-1"
                     fill="currentColor"
@@ -38,7 +38,7 @@ const ProductSection = () => {
                   </svg>
                   Jalan Utama No. 123, Springfield
                 </div>
-                <div className="mt-1 flex items-center text-sm">
+                <div className="mt-1 flex items-center text-sm font-legacy">
                   <svg
                     className="w-4 h-4 text-gray-500 mr-1"
                     fill="currentColor"
@@ -49,11 +49,18 @@ const ProductSection = () => {
                   3 Kamar Tidur, 2 Kamar Mandi
                 </div>
               </div>
-              <div className="mt-1 text-sm text-gray-500 px-4 py-2">
+              <div className="mt-1 text-sm text-gray-500 px-4 py-2 font-legacy">
                 <span>Tersedia: 4 rumah</span>
               </div>
               <div className="p-4 pt-0 product-card-footer">
-                <button className="bg-forest text-white px-4 py-2 rounded-md text-sm w-full hover:bg-[#1A4750]">
+                <button className="bg-forest text-white px-4 py-2 rounded-md text-sm w-full hover:bg-[#1A4750] flex items-center justify-center">
+                  <svg
+                    className="w-4 h-4 mr-2"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M6.62 10.79a15.564 15.564 0 006.58 6.58l2.2-2.2a1 1 0 011.11-.27c1.21.49 2.53.76 3.89.76a1 1 0 011 1v3.5a1 1 0 01-1 1C10.12 22 2 13.88 2 3.5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.36.27 2.68.76 3.89a1 1 0 01-.27 1.11l-2.2 2.2z" />
+                  </svg>
                   Hubungi Agen
                 </button>
               </div>
@@ -61,7 +68,7 @@ const ProductSection = () => {
 
             {/* Produk Sewa Rumah 2 */}
             <div className="bg-white shadow-md rounded-lg overflow-hidden relative flex flex-col product-card mt-16">
-              <div className="absolute top-0 left-0 bg-[#FAEB98] text-[#0E1525] px-4 py-2 rounded-md text-sm font-bold">
+              <div className="absolute top-0 left-0 bg-[#FAEB98] text-[#0E1525] px-4 py-2 rounded-md text-sm font-bold font-legacy">
                 Rp 3.000.000 / bulan
               </div>
               <div className="h-40 overflow-hidden">
@@ -71,15 +78,15 @@ const ProductSection = () => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="p-4 flex-grow product-card-content">
-                <h2 className="text-lg font-bold text-gray-800">
+              <div className="p-4 flex-grow product-card-content font-legacy">
+                <h2 className="text-lg font-bold text-gray-800 font-legacy">
                   Rumah Modern Mewah
                 </h2>
-                <p className="text-gray-600 mt-2 text-sm">
+                <p className="text-gray-600 mt-2 text-sm font-legacy">
                   Rumah ini menghadirkan kemewahan dan kenyamanan dengan desain
                   yang modern dan perhatian terhadap detail.
                 </p>
-                <div className="mt-2 flex items-center text-sm">
+                <div className="mt-2 flex items-center text-sm font-legacy">
                   <svg
                     className="w-4 h-4 text-gray-500 mr-1"
                     fill="currentColor"
@@ -89,7 +96,7 @@ const ProductSection = () => {
                   </svg>
                   Jalan Kemang No. 456, Jakarta
                 </div>
-                <div className="mt-1 flex items-center text-sm">
+                <div className="mt-1 flex items-center text-sm font-legacy">
                   <svg
                     className="w-4 h-4 text-gray-500 mr-1"
                     fill="currentColor"
@@ -100,11 +107,18 @@ const ProductSection = () => {
                   4 Kamar Tidur, 3 Kamar Mandi
                 </div>
               </div>
-              <div className="mt-1 text-sm text-gray-500 px-4 py-2">
+              <div className="mt-1 text-sm text-gray-500 px-4 py-2 font-legacy">
                 <span>Tersedia: 4 rumah</span>
               </div>
               <div className="p-4 pt-0 product-card-footer">
-                <button className="bg-forest text-white px-4 py-2 rounded-md text-sm w-full hover:bg-[#1A4750]">
+                <button className="bg-forest text-white px-4 py-2 rounded-md text-sm w-full hover:bg-[#1A4750] flex items-center justify-center">
+                  <svg
+                    className="w-4 h-4 mr-2"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M6.62 10.79a15.564 15.564 0 006.58 6.58l2.2-2.2a1 1 0 011.11-.27c1.21.49 2.53.76 3.89.76a1 1 0 011 1v3.5a1 1 0 01-1 1C10.12 22 2 13.88 2 3.5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.36.27 2.68.76 3.89a1 1 0 01-.27 1.11l-2.2 2.2z" />
+                  </svg>
                   Hubungi Agen
                 </button>
               </div>
@@ -112,7 +126,7 @@ const ProductSection = () => {
 
             {/* Produk Sewa Rumah 3 */}
             <div className="bg-white shadow-md rounded-lg overflow-hidden relative flex flex-col product-card mt-16">
-              <div className="absolute top-0 left-0 bg-[#FAEB98] text-[#0E1525] px-4 py-2 rounded-md text-sm font-bold">
+              <div className="absolute top-0 left-0 bg-[#FAEB98] text-[#0E1525] px-4 py-2 rounded-md text-sm font-bold font-legacy">
                 Rp 2.200.000 / bulan
               </div>
               <div className="h-40 overflow-hidden">
@@ -122,15 +136,15 @@ const ProductSection = () => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="p-4 flex-grow product-card-content">
-                <h2 className="text-lg font-bold text-gray-800">
+              <div className="p-4 flex-grow product-card-content font-legacy">
+                <h2 className="text-lg font-bold text-gray-800 font-legacy">
                   Rumah Minimalis Nyaman
                 </h2>
-                <p className="text-gray-600 mt-2 text-sm">
+                <p className="text-gray-600 mt-2 text-sm font-legacy">
                   Rumah ini menawarkan kenyamanan dengan desain minimalis yang
                   sederhana namun elegan.
                 </p>
-                <div className="mt-2 flex items-center text-sm">
+                <div className="mt-2 flex items-center text-sm font-legacy">
                   <svg
                     className="w-4 h-4 text-gray-500 mr-1"
                     fill="currentColor"
@@ -140,7 +154,7 @@ const ProductSection = () => {
                   </svg>
                   Jalan Diponegoro No. 789, Surabaya
                 </div>
-                <div className="mt-1 flex items-center text-sm">
+                <div className="mt-1 flex items-center text-sm font-legacy">
                   <svg
                     className="w-4 h-4 text-gray-500 mr-1"
                     fill="currentColor"
@@ -151,11 +165,18 @@ const ProductSection = () => {
                   2 Kamar Tidur, 1 Kamar Mandi
                 </div>
               </div>
-              <div className="mt-1 text-sm text-gray-500 px-4 py-2">
+              <div className="mt-1 text-sm text-gray-500 px-4 py-2 font-legacy">
                 <span>Tersedia: 5 rumah</span>
               </div>
               <div className="p-4 pt-0 product-card-footer">
-                <button className="bg-forest text-white px-4 py-2 rounded-md text-sm w-full hover:bg-[#1A4750]">
+                <button className="bg-forest text-white px-4 py-2 rounded-md text-sm w-full hover:bg-[#1A4750] flex items-center justify-center">
+                  <svg
+                    className="w-4 h-4 mr-2"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M6.62 10.79a15.564 15.564 0 006.58 6.58l2.2-2.2a1 1 0 011.11-.27c1.21.49 2.53.76 3.89.76a1 1 0 011 1v3.5a1 1 0 01-1 1C10.12 22 2 13.88 2 3.5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.36.27 2.68.76 3.89a1 1 0 01-.27 1.11l-2.2 2.2z" />
+                  </svg>
                   Hubungi Agen
                 </button>
               </div>
@@ -163,7 +184,7 @@ const ProductSection = () => {
 
             {/* Produk Sewa Rumah 4 */}
             <div className="bg-white shadow-md rounded-lg overflow-hidden relative flex flex-col product-card mt-16">
-              <div className="absolute top-0 left-0 bg-[#FAEB98] text-[#0E1525] px-4 py-2 rounded-md text-sm font-bold">
+              <div className="absolute top-0 left-0 bg-[#FAEB98] text-[#0E1525] px-4 py-2 rounded-md text-sm font-bold font-legacy">
                 Rp 2.800.000 / bulan
               </div>
               <div className="h-40 overflow-hidden">
@@ -173,15 +194,15 @@ const ProductSection = () => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="p-4 flex-grow product-card-content">
-                <h2 className="text-lg font-bold text-gray-800">
+              <div className="p-4 flex-grow product-card-content font-legacy">
+                <h2 className="text-lg font-bold text-gray-800 font-legacy">
                   Rumah Suburban Luas
                 </h2>
-                <p className="text-gray-600 mt-2 text-sm">
+                <p className="text-gray-600 mt-2 text-sm font-legacy">
                   Rumah ini menawarkan ruang yang luas dengan lingkungan
                   perkotaan yang nyaman.
                 </p>
-                <div className="mt-2 flex items-center text-sm">
+                <div className="mt-2 flex items-center text-sm font-legacy">
                   <svg
                     className="w-4 h-4 text-gray-500 mr-1"
                     fill="currentColor"
@@ -191,7 +212,7 @@ const ProductSection = () => {
                   </svg>
                   Jalan Sudirman No. 101, Bandung
                 </div>
-                <div className="mt-1 flex items-center text-sm">
+                <div className="mt-1 flex items-center text-sm font-legacy">
                   <svg
                     className="w-4 h-4 text-gray-500 mr-1"
                     fill="currentColor"
@@ -202,11 +223,18 @@ const ProductSection = () => {
                   3 Kamar Tidur, 2 Kamar Mandi
                 </div>
               </div>
-              <div className="mt-1 text-sm text-gray-500 px-4 py-2">
+              <div className="mt-1 text-sm text-gray-500 px-4 py-2 font-legacy">
                 <span>Tersedia: 3 rumah</span>
               </div>
               <div className="p-4 pt-0 product-card-footer">
-                <button className="bg-forest text-white px-4 py-2 rounded-md text-sm w-full hover:bg-[#1A4750]">
+                <button className="bg-forest text-white px-4 py-2 rounded-md text-sm w-full hover:bg-[#1A4750] flex items-center justify-center">
+                  <svg
+                    className="w-4 h-4 mr-2"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M6.62 10.79a15.564 15.564 0 006.58 6.58l2.2-2.2a1 1 0 011.11-.27c1.21.49 2.53.76 3.89.76a1 1 0 011 1v3.5a1 1 0 01-1 1C10.12 22 2 13.88 2 3.5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.36.27 2.68.76 3.89a1 1 0 01-.27 1.11l-2.2 2.2z" />
+                  </svg>
                   Hubungi Agen
                 </button>
               </div>

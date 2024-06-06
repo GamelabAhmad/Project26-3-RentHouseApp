@@ -1,17 +1,16 @@
 import React from "react";
-import Navbar from "./Navbar"; // Sesuaikan dengan path file Navbar
+import Navbar from "./Navbar";
 
 const AboutRentHouse = () => {
   return (
     <>
-      <Navbar hideNavbar={true} />{" "}
-      {/* Navbar akan disembunyikan di halaman AboutRentHouse */}
+      <Navbar hideNavbar={true} /> {}
       <section
-        id="about-rent-house"
+        id="about"
         className="bg-white py-12 font-spartan rounded-lg mt-8"
       >
         <div className="container mx-auto px-4 md:px-8">
-          <div className="text-center">
+          <div className="text-center font-legacy">
             <h2 className="text-4xl font-bold text-forest mb-4">
               Tentang Sewa Rumah
             </h2>
@@ -27,7 +26,7 @@ const AboutRentHouse = () => {
                 className="w-full h-full object-cover rounded-md"
               />
             </div>
-            <div className="text-gray-800">
+            <div className="text-gray-800 font-legacy">
               <p className="text-lg mb-4">
                 Rent House Indonesia adalah platform yang menyediakan berbagai
                 pilihan rumah untuk disewa sesuai dengan kebutuhan dan
