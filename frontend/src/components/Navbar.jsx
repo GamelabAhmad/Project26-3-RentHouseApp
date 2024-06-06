@@ -18,17 +18,14 @@ const Navbar = ({ hideNavbar }) => {
           <NavLink to="/" className="text-white p-2 text-lg font-medium">
             Home
           </NavLink>
-          <NavLink to="/about" className="text-white p-2 text-lg font-medium">
+          <NavLink to="#about" className="text-white p-2 text-lg font-medium">
             About
           </NavLink>
-          <NavLink
-            to="/services"
-            className="text-white p-2 text-lg font-medium"
-          >
+          <NavLink to="#contact" className="text-white p-2 text-lg font-medium">
             Contact
           </NavLink>
           <NavLink
-            to="/contact"
+            to="/login"
             className="text-white flex p-2 text-lg font-medium items-center gap-1"
           >
             Login <IoIosLogIn className="font-bold" />

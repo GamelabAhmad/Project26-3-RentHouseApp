@@ -6,7 +6,7 @@ const AboutRentHouse = () => {
     <>
       <Navbar hideNavbar={true} /> {}
       <section
-        id="about-rent-house"
+        id="about"
         className="bg-white py-12 font-spartan rounded-lg mt-8"
       >
         <div className="container mx-auto px-4 md:px-8">
