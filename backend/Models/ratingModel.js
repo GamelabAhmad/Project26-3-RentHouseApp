@@ -38,7 +38,7 @@ const Rating = db.define(
 );
 
 User.hasMany(Rating, { foreignKey: 'id_user' });
-Kost.hasMany(Rating, { foreignKey: 'id_kost' });
+Kost.hasMany(Rating, { as: 'rating_kost', foreignKey: 'id_kost' });
 Rating.belongsTo(Kost, { as: 'rating_kost', foreignKey: 'id_kost' });
 Rating.belongsTo(User, { as: 'rating_user', foreignKey: 'id_user' });
 

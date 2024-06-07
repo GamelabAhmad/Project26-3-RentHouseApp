@@ -1,7 +1,8 @@
 const { Kost, detailKost } = require('../Models/kostModel');
 const jwt = require('jsonwebtoken');
-const { Op } = require('sequelize');
+const { Op, Sequelize } = require('sequelize');
 const cloudinary = require('../middleware/cloudinary');
+const Rating = require('../Models/ratingModel');
 
 const createKost = async (req, res) => {
   const id_user = jwt.decode(req.cookies.token).id;
@@ -97,18 +98,32 @@ const createKost = async (req, res) => {
 const getKosts = async (req, res) => {
   try {
     const kosts = await Kost.findAll({
-      include: {
-        model: detailKost,
-        attributes: ['tipe_kost', 'harga_sewa', 'jumlah_kamar', 'fasilitas', 'peraturan', 'gambar'],
-        as: 'detail',
+      attributes: {
+        include: [[Sequelize.fn('ROUND', Sequelize.fn('AVG', Sequelize.col('rating')), 1), 'average_rating']],
       },
+      include: [
+        {
+          model: detailKost,
+          attributes: ['tipe_kost', 'harga_sewa', 'jumlah_kamar', 'fasilitas', 'peraturan', 'gambar'],
+          as: 'detail',
+        },
+        {
+          model: Rating,
+          attributes: [],
+          as: 'rating_kost',
+        },
+      ],
+      group: ['tbl_kost.id', 'detail.id'],
     });
+
     if (kosts.length === 0) {
-      return res.status(404).json({ message: 'kost tidak ditemukan' });
+      return res.status(404).json({ message: 'Kost tidak ditemukan' });
     }
-    res.status(200).json(kosts);
+
+    return res.status(200).json(kosts);
   } catch (error) {
-    res.status(500).json({ message: 'Status error' });
+    console.error(error);
+    return res.status(500).json({ message: 'Terjadi kesalahan pada server' });
   }
 };
 
@@ -117,11 +132,18 @@ const getKostsById = async (req, res) => {
     const { id } = req.params;
     const kosts = await Kost.findOne({
       where: { id: id },
-      include: {
-        model: detailKost,
-        attributes: ['tipe_kost', 'harga_sewa', 'jumlah_kamar', 'fasilitas', 'peraturan', 'gambar'],
-        as: 'detail',
-      },
+      include: [
+        {
+          model: detailKost,
+          attributes: ['tipe_kost', 'harga_sewa', 'jumlah_kamar', 'fasilitas', 'peraturan', 'gambar'],
+          as: 'detail',
+        },
+        {
+          model: Rating,
+          attributes: ['rating', 'review'],
+          as: 'rating_kost',
+        },
+      ],
     });
     if (!kosts) {
       return res.status(404).json({ message: 'kost tidak ditemukan' });
@@ -140,11 +162,22 @@ const searchKosts = async (req, res) => {
       where: {
         [Op.or]: [{ nama_kost: { [Op.like]: `%${q}%` } }, { alamat: { [Op.like]: `%${q}%` } }, { kota: { [Op.like]: `%${q}%` } }, { kecamatan: { [Op.like]: `%${q}%` } }],
       },
-      include: {
-        model: detailKost,
-        attributes: ['tipe_kost', 'harga_sewa', 'jumlah_kamar', 'fasilitas', 'peraturan', 'gambar'],
-        as: 'detail',
+      attributes: {
+        include: [[Sequelize.fn('ROUND', Sequelize.fn('AVG', Sequelize.col('rating')), 1), 'average_rating']],
       },
+      include: [
+        {
+          model: detailKost,
+          attributes: ['tipe_kost', 'harga_sewa', 'jumlah_kamar', 'fasilitas', 'peraturan', 'gambar'],
+          as: 'detail',
+        },
+        {
+          model: Rating,
+          attributes: [],
+          as: 'rating_kost',
+        },
+      ],
+      group: ['tbl_kost.id', 'detail.id'],
     });
     if (kosts.length === 0) {
       return res.status(404).json({ message: 'kost tidak ditemukan' });
@@ -165,11 +198,22 @@ const getKostsByKota = async (req, res) => {
           [Op.like]: `%${q}%`,
         },
       },
-      include: {
-        model: detailKost,
-        attributes: ['tipe_kost', 'harga_sewa', 'jumlah_kamar', 'fasilitas', 'peraturan', 'gambar'],
-        as: 'detail',
+      attributes: {
+        include: [[Sequelize.fn('ROUND', Sequelize.fn('AVG', Sequelize.col('rating')), 1), 'average_rating']],
       },
+      include: [
+        {
+          model: detailKost,
+          attributes: ['tipe_kost', 'harga_sewa', 'jumlah_kamar', 'fasilitas', 'peraturan', 'gambar'],
+          as: 'detail',
+        },
+        {
+          model: Rating,
+          attributes: [],
+          as: 'rating_kost',
+        },
+      ],
+      group: ['tbl_kost.id', 'detail.id'],
     });
 
     if (kosts.length === 0) {
@@ -185,9 +229,10 @@ const getKostsByKota = async (req, res) => {
 const updateKost = async (req, res) => {
   const { id } = req.params;
   const { nama_kost, alamat, kota, kecamatan, deskripsi, tipe_kost, harga_sewa, jumlah_kamar, fasilitas, peraturan } = req.body;
+  const id_user = jwt.decode(req.cookies.token).id;
 
   try {
-    const kost = await Kost.findByPk(id, { include: { model: detailKost, as: 'detail' } });
+    const kost = await Kost.findOne({ where: { id: id, id_user: id_user }, include: { model: detailKost, as: 'detail' } });
 
     if (!kost) {
       return res.status(404).json({ message: 'Kost tidak ditemukan' });
@@ -268,7 +313,8 @@ const updateKost = async (req, res) => {
 const deleteKost = async (req, res) => {
   try {
     const { id } = req.params;
-    const kost = await Kost.findOne({ where: { id: id } });
+    const id_user = jwt.decode(req.cookies.token).id;
+    const kost = await Kost.findOne({ where: { id: id, id_user: id_user } });
     if (!kost) {
       return res.status(404).json({ message: 'kost tidak ditemukan' });
     }

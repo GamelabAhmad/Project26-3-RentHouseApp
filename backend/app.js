@@ -27,7 +27,7 @@ app.listen(4000, () => {
   // Kost.sync({ alter: true });
   // detailKost.sync({ alter: true });
   // Transaksi.sync({ alter: true });
-  // Rating.sync({ alter: true });
+  Rating.sync({ alter: true });
 });
 
 module.exports = app;

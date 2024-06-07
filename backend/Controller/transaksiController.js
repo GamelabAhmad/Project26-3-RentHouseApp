@@ -5,22 +5,15 @@ const jwt = require('jsonwebtoken');
 
 // Mendapatkan semua transaksi
 const getAllTransaksiByPemilikId = async (req, res) => {
-  const { id } = req.params;
+  const id_user = jwt.decode(req.cookies.token).id;
   try {
     const transaksi = await Transaksi.findAll({
-      include: [
-        {
-          model: Kost,
-          as: 'kost',
-          attributes: ['id', 'nama_kost'],
-          where: { id_user: id },
-        },
-        {
-          model: User,
-          as: 'pembayar',
-          attributes: ['id', 'username'],
-        },
-      ],
+      include: {
+        model: Kost,
+        as: 'kost',
+        attributes: ['id', 'nama_kost'],
+        where: { id_user: id_user },
+      },
       order: [['status', 'ASC']],
     });
 
@@ -36,7 +29,7 @@ const getAllTransaksiByPemilikId = async (req, res) => {
 
 // Mendapatkan transaksi berdasarkan ID user
 const getTransaksiByIdUser = async (req, res) => {
-  const { id } = req.params;
+  const id = jwt.decode(req.cookies.token).id;
   try {
     const userTransaction = await Transaksi.findAll({
       where: { id_user: id },
@@ -86,17 +79,22 @@ const createTransaksi = async (req, res) => {
 // Memperbarui transaksi berdasarkan ID
 const updateTransaksi = async (req, res) => {
   const { id } = req.params;
+  const id_user = jwt.decode(req.cookies.token).id;
 
   try {
-    const transaksi = await Transaksi.findOne({ where: { id: id } });
+    const transaksi = await Transaksi.findOne({ where: { id: id }, include: [{ model: Kost, as: 'kost', where: { id_user: id_user } }] });
     if (!transaksi) {
       return res.status(404).json({ message: 'transaksi tidak ditemukan' });
+    }
+
+    if (transaksi.status === 'accepted') {
+      return res.status(400).json({ message: 'transaksi ini telah di acc' });
     }
 
     transaksi.status = 'accepted';
     await transaksi.save();
     res.status(200).json({
-      message: 'Transaksi sukses',
+      message: 'Transaksi Accepted',
     });
   } catch (error) {
     console.log(error);

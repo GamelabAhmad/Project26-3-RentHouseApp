@@ -90,7 +90,9 @@ const login = async (req, res) => {
 
 const getUserById = async (req, res) => {
   const id_user = jwt.decode(req.cookies.token).id;
-  const user = await User.findByPk(id_user);
+  const user = await User.findByPk(id_user, {
+    attributes: ['id', 'email', 'fullname', 'nomor_telp'],
+  });
 
   if (!user) {
     return res.status(404).json({ message: 'User not found' });
@@ -105,12 +107,13 @@ const updateUser = async (req, res) => {
     const id_user = jwt.decode(req.cookies.token).id;
     const user = await User.findOne({ where: { id: id_user } });
     if (!user) return res.status(404).json({ message: 'User not found' });
-    user.password = password || user.password;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    user.password = hashedPassword || user.password;
     user.email = email || user.email;
     user.fullname = fullname || user.fullname;
     user.nomor_telp = nomor_telp || user.nomor_telp;
     await user.save();
-    res.status(200).json(user);
+    res.status(200).json({ message: 'User updated successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
