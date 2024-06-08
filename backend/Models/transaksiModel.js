@@ -1,6 +1,6 @@
 const db = require('../Database/database');
 const { DataTypes } = require('sequelize');
-const { Kost } = require('./kostModel');
+const { Kost } = require('./rumahModel');
 const User = require('./userModel');
 
 const Transaksi = db.define(

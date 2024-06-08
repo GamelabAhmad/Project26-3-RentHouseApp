@@ -1,5 +1,5 @@
 const Transaksi = require('../Models/transaksiModel');
-const { Kost, detailKost } = require('../Models/kostModel');
+const { Kost, detailKost } = require('../Models/rumahModel');
 const User = require('../Models/userModel');
 const jwt = require('jsonwebtoken');
 

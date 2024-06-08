@@ -1,5 +1,5 @@
 const Rating = require('../Models/ratingModel');
-const { Kost, detailKost } = require('../Models/kostModel');
+const { Kost, detailKost } = require('../Models/rumahModel');
 const User = require('../Models/userModel');
 const Transaksi = require('../Models/transaksiModel');
 const jwt = require('jsonwebtoken');

@@ -7,7 +7,7 @@ const transaksiRoutes = require('./Routes/transaksiRoutes');
 const Rating = require('./Models/ratingModel');
 const ratingRoutes = require('./Routes/ratingRoutes');
 const Transaksi = require('./Models/transaksiModel');
-const { Kost, detailKost } = require('./Models/kostModel');
+const { Kost, detailKost } = require('./Models/rumahModel');
 const app = express();
 
 app.use(express.json());

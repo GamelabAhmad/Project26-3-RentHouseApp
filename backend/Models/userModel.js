@@ -35,4 +35,20 @@ const User = db.define(
   }
 );
 
+const Rekening = db.define('tbl_rekening', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  nomor_rekening: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  nama_bank: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+});
+
 module.exports = User;
