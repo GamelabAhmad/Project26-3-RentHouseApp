@@ -1,9 +1,8 @@
-// components/ContactPage.js
 import React from "react";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
-function ContactPage() {
+export default function Contact() {
   return (
     <div>
       <Navbar />
@@ -83,5 +82,3 @@ function ContactPage() {
     </div>
   );
 }
-
-export default ContactPage;
