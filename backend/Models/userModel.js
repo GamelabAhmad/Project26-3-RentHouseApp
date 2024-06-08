@@ -51,4 +51,7 @@ const Rekening = db.define('tbl_rekening', {
   },
 });
 
-module.exports = User;
+User.hasOne(Rekening, { as: 'rekening', foreignKey: 'id_user' });
+Rekening.belongsTo(User, { foreignKey: 'id_user' });
+
+module.exports = { User, Rekening };

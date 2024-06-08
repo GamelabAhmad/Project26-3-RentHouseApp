@@ -1,50 +1,60 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../Models/userModel');
+const { User, Rekening } = require('../Models/userModel');
 const { google } = require('googleapis');
 const oauth2Client = require('../middleware/authGoogle');
 
 const register = async (req, res) => {
-  const { email, password, fullname, nomor_telp, role } = req.body;
+  const { email, password, fullname, nomor_telp, role, nama_bank, nomor_rekening } = req.body;
 
-  if (!email || !password || !fullname || !nomor_telp || !role) {
-    return res.status(400).json({
-      status: 'error',
-      message: 'All fields are required',
+  try {
+    if (!email || !password || !fullname || !nomor_telp || !role) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'All fields are required',
+      });
+    }
+
+    const checkEmail = await User.findOne({ where: { email } });
+
+    if (checkEmail) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Email already exist',
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await User.create({
+      email,
+      password: hashedPassword,
+      fullname,
+      nomor_telp,
+      role,
     });
-  }
 
-  const checkEmail = await User.findOne({ where: { email } });
+    if (user) {
+      await Rekening.create({
+        id_user: user.id,
+        nama_bank,
+        nomor_rekening,
+      });
 
-  if (checkEmail) {
-    return res.status(400).json({
-      status: 'error',
-      message: 'Email already exist',
-    });
-  }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const user = await User.create({
-    email,
-    password: hashedPassword,
-    fullname,
-    nomor_telp,
-    role,
-  });
-
-  if (user) {
-    return res.status(201).json({
-      status: 'success',
-      message: 'Register success',
-      data: {
-        id: user.id,
-        email,
-        fullname,
-        nomor_telp,
-        role,
-      },
-    });
+      return res.status(201).json({
+        status: 'success',
+        message: 'Register success',
+        data: {
+          id: user.id,
+          email,
+          fullname,
+          nomor_telp,
+          role,
+        },
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
   }
 };
 
@@ -103,7 +113,7 @@ const getUserById = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const { email, fullname, nomor_telp, password } = req.body;
+    const { email, fullname, nomor_telp, password, nomor_rekening, nama_bank } = req.body;
     const id_user = jwt.decode(req.cookies.token).id;
     const user = await User.findOne({ where: { id: id_user } });
     if (!user) return res.status(404).json({ message: 'User not found' });
@@ -113,6 +123,11 @@ const updateUser = async (req, res) => {
     user.fullname = fullname || user.fullname;
     user.nomor_telp = nomor_telp || user.nomor_telp;
     await user.save();
+
+    const rekening = await Rekening.findOne({ where: { id_user: id_user } });
+    rekening.nomor_rekening = nomor_rekening || rekening.nomor_rekening;
+    rekening.nama_bank = nama_bank || rekening.nama_bank;
+    await rekening.save();
     res.status(200).json({ message: 'User updated successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -152,7 +167,7 @@ const googleCallback = async (req, res) => {
       role: 'penyewa',
     });
   }
-  const token = jwt.sign({ id: user.id, username: user.username, email: user.email, role: user.role, fullname: user.fullname }, 'secret', { expiresIn: '1d' });
+  const token = jwt.sign({ id: user.id, email: user.email, role: user.role, fullname: user.fullname }, 'secret', { expiresIn: '1d' });
   res.cookie('token', token, {
     maxAge: 1000 * 60 * 60 * 24,
     httpOnly: true,

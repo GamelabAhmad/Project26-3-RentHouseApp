@@ -1,7 +1,7 @@
 const db = require('../Database/database');
 const { DataTypes } = require('sequelize');
-const { Kost } = require('./rumahModel');
-const User = require('./userModel');
+const { Rumah } = require('./rumahModel');
+const { User } = require('./userModel');
 
 const Rating = db.define(
   'tbl_rating',
@@ -15,7 +15,7 @@ const Rating = db.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    id_kost: {
+    id_rumah: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -38,8 +38,8 @@ const Rating = db.define(
 );
 
 User.hasMany(Rating, { foreignKey: 'id_user' });
-Kost.hasMany(Rating, { as: 'rating_kost', foreignKey: 'id_kost' });
-Rating.belongsTo(Kost, { as: 'rating_kost', foreignKey: 'id_kost' });
+Rumah.hasMany(Rating, { as: 'rating_rumah', foreignKey: 'id_rumah' });
+Rating.belongsTo(Rumah, { as: 'rating_rumah', foreignKey: 'id_rumah' });
 Rating.belongsTo(User, { as: 'rating_user', foreignKey: 'id_user' });
 
 module.exports = Rating;

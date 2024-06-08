@@ -1,7 +1,7 @@
 const db = require('../Database/database');
 const { DataTypes } = require('sequelize');
-const { Kost } = require('./rumahModel');
-const User = require('./userModel');
+const { Rumah } = require('./rumahModel');
+const { User } = require('./userModel');
 
 const Transaksi = db.define(
   'tbl_transaksi',
@@ -15,7 +15,7 @@ const Transaksi = db.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    id_kost: {
+    id_rumah: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -38,7 +38,7 @@ const Transaksi = db.define(
   }
 );
 
-Transaksi.belongsTo(Kost, { as: 'kost', foreignKey: 'id_kost' });
+Transaksi.belongsTo(Rumah, { as: 'rumah', foreignKey: 'id_rumah' });
 Transaksi.belongsTo(User, { as: 'pembayar', foreignKey: 'id_user' });
 
 module.exports = Transaksi;
