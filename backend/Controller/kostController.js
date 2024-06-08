@@ -1,7 +1,8 @@
 const { Kost, detailKost } = require('../Models/kostModel');
 const jwt = require('jsonwebtoken');
-const { Op } = require('sequelize');
+const { Op, Sequelize } = require('sequelize');
 const cloudinary = require('../middleware/cloudinary');
+const Rating = require('../Models/ratingModel');
 
 const createKost = async (req, res) => {
   const id_user = jwt.decode(req.cookies.token).id;
@@ -84,7 +85,7 @@ const createKost = async (req, res) => {
 
       await transaction.commit();
 
-      res.status(201).json({ message: 'kost berhasil dibuat' });
+      res.status(201).json(kost);
     } catch (error) {
       await transaction.rollback();
       throw error;
@@ -97,18 +98,32 @@ const createKost = async (req, res) => {
 const getKosts = async (req, res) => {
   try {
     const kosts = await Kost.findAll({
-      include: {
-        model: detailKost,
-        attributes: ['tipe_kost', 'harga_sewa', 'jumlah_kamar', 'fasilitas', 'peraturan', 'gambar'],
-        as: 'detail',
+      attributes: {
+        include: [[Sequelize.fn('ROUND', Sequelize.fn('AVG', Sequelize.col('rating')), 1), 'average_rating']],
       },
+      include: [
+        {
+          model: detailKost,
+          attributes: ['tipe_kost', 'harga_sewa', 'jumlah_kamar', 'fasilitas', 'peraturan', 'gambar'],
+          as: 'detail',
+        },
+        {
+          model: Rating,
+          attributes: [],
+          as: 'rating_kost',
+        },
+      ],
+      group: ['tbl_kost.id', 'detail.id'],
     });
+
     if (kosts.length === 0) {
-      return res.status(404).json({ message: 'kost tidak ditemukan' });
+      return res.status(404).json({ message: 'Kost tidak ditemukan' });
     }
-    res.status(200).json(kosts);
+
+    return res.status(200).json(kosts);
   } catch (error) {
-    res.status(500).json({ message: 'Status error' });
+    console.error(error);
+    return res.status(500).json({ message: 'Terjadi kesalahan pada server' });
   }
 };
 
@@ -117,11 +132,18 @@ const getKostsById = async (req, res) => {
     const { id } = req.params;
     const kosts = await Kost.findOne({
       where: { id: id },
-      include: {
-        model: detailKost,
-        attributes: ['tipe_kost', 'harga_sewa', 'jumlah_kamar', 'fasilitas', 'peraturan', 'gambar'],
-        as: 'detail',
-      },
+      include: [
+        {
+          model: detailKost,
+          attributes: ['tipe_kost', 'harga_sewa', 'jumlah_kamar', 'fasilitas', 'peraturan', 'gambar'],
+          as: 'detail',
+        },
+        {
+          model: Rating,
+          attributes: ['rating', 'review'],
+          as: 'rating_kost',
+        },
+      ],
     });
     if (!kosts) {
       return res.status(404).json({ message: 'kost tidak ditemukan' });
@@ -140,11 +162,22 @@ const searchKosts = async (req, res) => {
       where: {
         [Op.or]: [{ nama_kost: { [Op.like]: `%${q}%` } }, { alamat: { [Op.like]: `%${q}%` } }, { kota: { [Op.like]: `%${q}%` } }, { kecamatan: { [Op.like]: `%${q}%` } }],
       },
-      include: {
-        model: detailKost,
-        attributes: ['tipe_kost', 'harga_sewa', 'jumlah_kamar', 'fasilitas', 'peraturan', 'gambar'],
-        as: 'detail',
+      attributes: {
+        include: [[Sequelize.fn('ROUND', Sequelize.fn('AVG', Sequelize.col('rating')), 1), 'average_rating']],
       },
+      include: [
+        {
+          model: detailKost,
+          attributes: ['tipe_kost', 'harga_sewa', 'jumlah_kamar', 'fasilitas', 'peraturan', 'gambar'],
+          as: 'detail',
+        },
+        {
+          model: Rating,
+          attributes: [],
+          as: 'rating_kost',
+        },
+      ],
+      group: ['tbl_kost.id', 'detail.id'],
     });
     if (kosts.length === 0) {
       return res.status(404).json({ message: 'kost tidak ditemukan' });
@@ -156,17 +189,33 @@ const searchKosts = async (req, res) => {
   }
 };
 
-const searchKostsByCity = async (req, res) => {
+const getKostsByKota = async (req, res) => {
   try {
-    const { kota } = req.body;
+    const { q } = req.query;
     const kosts = await Kost.findAll({
-      where: { kota: kota },
-      include: {
-        model: detailKost,
-        attributes: ['tipe_kost', 'harga_sewa', 'jumlah_kamar', 'fasilitas', 'peraturan', 'gambar'],
-        as: 'detail',
+      where: {
+        kota: {
+          [Op.like]: `%${q}%`,
+        },
       },
+      attributes: {
+        include: [[Sequelize.fn('ROUND', Sequelize.fn('AVG', Sequelize.col('rating')), 1), 'average_rating']],
+      },
+      include: [
+        {
+          model: detailKost,
+          attributes: ['tipe_kost', 'harga_sewa', 'jumlah_kamar', 'fasilitas', 'peraturan', 'gambar'],
+          as: 'detail',
+        },
+        {
+          model: Rating,
+          attributes: [],
+          as: 'rating_kost',
+        },
+      ],
+      group: ['tbl_kost.id', 'detail.id'],
     });
+
     if (kosts.length === 0) {
       return res.status(404).json({ message: 'kost tidak ditemukan' });
     }
@@ -177,43 +226,95 @@ const searchKostsByCity = async (req, res) => {
   }
 };
 
-const updateKosts = async (req, res) => {
+const updateKost = async (req, res) => {
+  const { id } = req.params;
+  const { nama_kost, alamat, kota, kecamatan, deskripsi, tipe_kost, harga_sewa, jumlah_kamar, fasilitas, peraturan } = req.body;
+  const id_user = jwt.decode(req.cookies.token).id;
+
   try {
-    const { id } = req.params;
-    const { nama_kost, alamat, kota, kecamatan, deskripsi, fasilitas, peraturan, tipe_kost, harga_sewa, jumlah_kamar } = req.body;
-    const kost = await Kost.findOne({ where: { id: id } });
+    const kost = await Kost.findOne({ where: { id: id, id_user: id_user }, include: { model: detailKost, as: 'detail' } });
+
     if (!kost) {
-      return res.status(404).json({ message: 'kost tidak ditemukan' });
-    }
-    const detail = await detailKost.findOne({ where: { id_kost: kost.id } });
-    if (!detail) {
-      return res.status(404).json({ message: 'detail kost tidak ditemukan' });
+      return res.status(404).json({ message: 'Kost tidak ditemukan' });
     }
 
-    kost.nama_kost = nama_kost || kost.nama_kost;
-    kost.alamat = alamat || kost.alamat;
-    kost.kota = kota || kost.kota;
-    kost.deskripsi = deskripsi || kost.deskripsi;
-    kost.kecamatan = kecamatan || kost.kecamatan;
+    const transaction = await Kost.sequelize.transaction();
 
-    detail.fasilitas = fasilitas || detail.fasilitas;
-    detail.peraturan = peraturan || detail.peraturan;
-    detail.tipe_kost = tipe_kost || detail.tipe_kost;
-    detail.harga_sewa = harga_sewa || detail.harga_sewa;
-    detail.jumlah_kamar = jumlah_kamar || detail.jumlah_kamar;
+    try {
+      await kost.update(
+        {
+          nama_kost,
+          alamat,
+          kota,
+          kecamatan,
+          deskripsi,
+        },
+        { transaction }
+      );
 
-    await kost.save();
-    await detail.save();
-    res.status(200).json({ msg: 'kost berhasil diupdate' });
+      const images = req.files; // Menggunakan req.files untuk menangani multiple files
+      const validImageTypes = ['image/jpeg', 'image/png', 'image/jpg']; // Tipe file gambar yang diizinkan
+
+      // Memeriksa setiap file yang diunggah
+      for (const image of images) {
+        // Memeriksa tipe file
+        if (!validImageTypes.includes(image.mimetype)) {
+          return res.status(400).json({ message: 'gambar harus jpg/png/jpeg' });
+        }
+      }
+
+      const imageUploadPromises = images.map((image) => {
+        return new Promise((resolve, reject) => {
+          const uploadStream = cloudinary.uploader.upload_stream(
+            {
+              transformation: { quality: 'auto' },
+            },
+            (error, result) => {
+              if (error) {
+                reject(error);
+              } else {
+                resolve(result);
+              }
+            }
+          );
+
+          uploadStream.end(image.buffer);
+        });
+      });
+
+      const uploadedImages = await Promise.all(imageUploadPromises);
+      const imageUrls = uploadedImages.map((image) => image.secure_url);
+      const publicIds = uploadedImages.map((image) => image.public_id);
+
+      await kost.detail.update(
+        {
+          tipe_kost,
+          harga_sewa,
+          jumlah_kamar,
+          fasilitas,
+          peraturan,
+          gambar: [...kost.detail.gambar, ...imageUrls],
+          public_id: [...kost.detail.public_id, ...publicIds],
+        },
+        { transaction }
+      );
+
+      await transaction.commit();
+      res.status(200).json({ message: 'Kost berhasil diupdate' });
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
+    }
   } catch (error) {
-    res.status(500).json({ message: 'server Error' });
+    res.status(500).json({ message: error.message });
   }
 };
 
-const deleteKosts = async (req, res) => {
+const deleteKost = async (req, res) => {
   try {
     const { id } = req.params;
-    const kost = await Kost.findOne({ where: { id: id } });
+    const id_user = jwt.decode(req.cookies.token).id;
+    const kost = await Kost.findOne({ where: { id: id, id_user: id_user } });
     if (!kost) {
       return res.status(404).json({ message: 'kost tidak ditemukan' });
     }
@@ -239,4 +340,59 @@ const deleteKosts = async (req, res) => {
   }
 };
 
-module.exports = { createKost, getKosts, getKostsById, searchKosts, updateKosts, deleteKosts };
+const deleteImage = async (req, res) => {
+  const { id, public_id } = req.params;
+
+  try {
+    // Hapus gambar dari Cloudinary
+    if (!public_id) {
+      return res.status(400).json({ message: 'Public ID tidak ditemukan' });
+    }
+
+    // Ambil data detail kost dari database
+    const detailKostData = await detailKost.findOne({
+      where: { id_kost: id },
+      raw: true,
+    });
+
+    // Validasi jika kost tidak ditemukan
+    if (!detailKostData) {
+      return res.status(404).json({ message: 'Kost tidak ditemukan' });
+    }
+
+    // Validasi jika gambar tidak ada
+    if (!detailKostData.gambar || !detailKostData.public_id) {
+      return res.status(400).json({ message: 'Gambar tidak ada' });
+    }
+
+    // Validasi jika public_id tidak ada di database
+    if (!detailKostData.public_id.includes(public_id)) {
+      return res.status(400).json({ message: 'Public ID gambar tidak valid' });
+    }
+
+    // Menggunakan cloudinary.uploader.destroy untuk menghapus gambar dari Cloudinary
+    await cloudinary.uploader.destroy(public_id);
+    // Hapus gambar dari array gambar
+    const updatedGambar = detailKostData.gambar.filter((url) => !url.includes(public_id));
+
+    // Hapus public_id dari array public_id
+    const updatedPublicIds = detailKostData.public_id.filter((pid) => pid !== public_id);
+
+    // Perbarui data detail kost di database
+    await detailKost.update(
+      {
+        gambar: updatedGambar,
+        public_id: updatedPublicIds,
+      },
+      {
+        where: { id_kost: id },
+      }
+    );
+
+    res.status(200).json({ message: 'Gambar berhasil dihapus' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { createKost, getKosts, getKostsById, searchKosts, updateKost, deleteKost, getKostsByKota, deleteImage };

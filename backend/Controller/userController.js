@@ -5,9 +5,9 @@ const { google } = require('googleapis');
 const oauth2Client = require('../middleware/authGoogle');
 
 const register = async (req, res) => {
-  const { username, email, password, fullname, nomor_telp, role } = req.body;
+  const { email, password, fullname, nomor_telp, role } = req.body;
 
-  if (!username || !email || !password || !fullname || !nomor_telp || !role) {
+  if (!email || !password || !fullname || !nomor_telp || !role) {
     return res.status(400).json({
       status: 'error',
       message: 'All fields are required',
@@ -26,7 +26,6 @@ const register = async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const user = await User.create({
-    username,
     email,
     password: hashedPassword,
     fullname,
@@ -40,7 +39,6 @@ const register = async (req, res) => {
       message: 'Register success',
       data: {
         id: user.id,
-        username,
         email,
         fullname,
         nomor_telp,
@@ -71,7 +69,7 @@ const login = async (req, res) => {
     });
   }
 
-  const token = jwt.sign({ id: user.id, username: user.username, email: user.email, role: user.role, fullname: user.fullname }, 'secret', { expiresIn: '1d' });
+  const token = jwt.sign({ id: user.id, email: user.email, role: user.role, fullname: user.fullname }, 'secret', { expiresIn: '1d' });
 
   res.cookie('token', token, {
     maxAge: 1000 * 60 * 60 * 24,
@@ -83,25 +81,39 @@ const login = async (req, res) => {
     message: 'Login success',
     data: {
       id: user.id,
-      username: user.username,
+      fullname: user.fullname,
       email: user.email,
       token: token,
     },
   });
 };
 
+const getUserById = async (req, res) => {
+  const id_user = jwt.decode(req.cookies.token).id;
+  const user = await User.findByPk(id_user, {
+    attributes: ['id', 'email', 'fullname', 'nomor_telp'],
+  });
+
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  res.status(200).json(user);
+};
+
 const updateUser = async (req, res) => {
   try {
-    const { username, email, fullname, nomor_telp, password } = req.body;
-    const user = await User.findByPk(req.params.id);
+    const { email, fullname, nomor_telp, password } = req.body;
+    const id_user = jwt.decode(req.cookies.token).id;
+    const user = await User.findOne({ where: { id: id_user } });
     if (!user) return res.status(404).json({ message: 'User not found' });
-    user.username = username || user.username;
-    user.password = password || user.password;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    user.password = hashedPassword || user.password;
     user.email = email || user.email;
     user.fullname = fullname || user.fullname;
     user.nomor_telp = nomor_telp || user.nomor_telp;
     await user.save();
-    res.status(200).json(user);
+    res.status(200).json({ message: 'User updated successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -167,4 +179,6 @@ module.exports = {
   login,
   loginWithGoogle,
   googleCallback,
+  logout,
+  getUserById,
 };
