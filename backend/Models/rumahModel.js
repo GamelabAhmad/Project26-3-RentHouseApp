@@ -1,16 +1,16 @@
 const db = require('../Database/database');
 const { DataTypes } = require('sequelize');
-const User = require('./userModel');
+const { User } = require('./userModel');
 
-const Kost = db.define(
-  'tbl_kost',
+const Rumah = db.define(
+  'tbl_rumah',
   {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    nama_kost: {
+    nama_rumah: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -41,23 +41,23 @@ const Kost = db.define(
   }
 );
 
-const detailKost = db.define(
-  'tbl_detailkost',
+const detailRumah = db.define(
+  'tbl_detail_rumah',
   {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    tipe_kost: {
-      type: DataTypes.ENUM('putra', 'putri', 'campur'),
-      allowNull: false,
-    },
     harga_sewa: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    jumlah_kamar: {
+    jumlah_kamar_tidur: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    jumlah_kamar_mandi: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -84,9 +84,9 @@ const detailKost = db.define(
   }
 );
 
-User.hasMany(Kost, { as: 'kosts', foreignKey: 'id_user' });
-Kost.belongsTo(User, { foreignKey: 'id_user' });
-Kost.hasOne(detailKost, { as: 'detail', foreignKey: 'id_kost' });
-detailKost.belongsTo(Kost, { foreignKey: 'id_kost' });
+User.hasMany(Rumah, { as: 'rumah', foreignKey: 'id_user' });
+Rumah.belongsTo(User, { foreignKey: 'id_user' });
+Rumah.hasOne(detailRumah, { as: 'detail', foreignKey: 'id_rumah' });
+detailRumah.belongsTo(Rumah, { foreignKey: 'id_rumah' });
 
-module.exports = { Kost, detailKost };
+module.exports = { Rumah, detailRumah };

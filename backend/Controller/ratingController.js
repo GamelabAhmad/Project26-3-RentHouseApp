@@ -1,18 +1,17 @@
 const Rating = require('../Models/ratingModel');
-const { Kost, detailKost } = require('../Models/kostModel');
-const User = require('../Models/userModel');
+const { Rumah, detailRumah } = require('../Models/rumahModel');
 const Transaksi = require('../Models/transaksiModel');
 const jwt = require('jsonwebtoken');
 
 const createRating = async (req, res) => {
   try {
-    const { id_kost, rating, review } = req.body;
+    const { id_rumah, rating, review } = req.body;
     const id_user = jwt.decode(req.cookies.token).id;
 
     const transaction = await Transaksi.findOne({
       where: {
         id_user: id_user,
-        id_kost: id_kost,
+        id_rumah: id_rumah,
         status: 'accepted',
       },
     });
@@ -23,7 +22,7 @@ const createRating = async (req, res) => {
 
     const newRating = await Rating.create({
       id_user: id_user,
-      id_kost: id_kost,
+      id_rumah: id_rumah,
       rating: rating,
       review: review,
     });
@@ -39,7 +38,7 @@ const getRatingByUserId = async (req, res) => {
   try {
     const rating = await Rating.findAll({
       where: { id_user: id },
-      include: [{ model: Kost, attributes: ['id', 'nama_kost'], as: 'rating_kost', include: [{ model: detailKost, as: 'detail', attributes: ['id', 'harga_sewa', 'gambar'] }] }],
+      include: [{ model: Rumah, attributes: ['id', 'nama_rumah'], as: 'rating_rumah', include: [{ model: detailRumah, as: 'detail', attributes: ['id', 'harga_sewa', 'gambar'] }] }],
     });
     res.status(200).json(rating);
   } catch (error) {
@@ -54,7 +53,7 @@ const updateRating = async (req, res) => {
   try {
     const ratingUser = await Rating.findOne({
       where: { id: id, id_user: id_user },
-      include: [{ model: Kost, attributes: ['id', 'nama_kost'], as: 'rating_kost' }],
+      include: [{ model: Rumah, attributes: ['id', 'nama_rumah'], as: 'rating_rumah' }],
     });
 
     if (!ratingUser) {
