@@ -19,8 +19,22 @@ export default function Register() {
         <form className="space-y-6">
           <div className="form-group">
             <label
+              htmlFor="username"
+              className="block mb-2 text-gray-700 font-semibold ml-1"
+            >
+              Username
+            </label>
+            <input
+              type="text"
+              id="username"
+              placeholder="Username"
+              className="w-full px-1 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div className="form-group">
+            <label
               htmlFor="email"
-              className="block mb-2 text-gray-700 font-semibold"
+              className="block mb-2 text-gray-700 font-semibold ml-1"
             >
               Email
             </label>
@@ -28,13 +42,13 @@ export default function Register() {
               type="email"
               id="email"
               placeholder="Email"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-1 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div className="form-group">
             <label
               htmlFor="password"
-              className="block mb-2 text-gray-700 font-semibold"
+              className="block mb-2 text-gray-700 font-semibold ml-1"
             >
               Password
             </label>
@@ -42,13 +56,13 @@ export default function Register() {
               type="password"
               id="password"
               placeholder="Password"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-1 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div className="form-group">
             <label
               htmlFor="confirm-password"
-              className="block mb-2 text-gray-700 font-semibold"
+              className="block mb-2 text-gray-700 font-semibold ml-1"
             >
               Confirm Password
             </label>
@@ -56,12 +70,12 @@ export default function Register() {
               type="password"
               id="confirm-password"
               placeholder="Confirm Password"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-1 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <button
             type="submit"
-            className="w-full py-2 bg-forest text-white rounded-md hover:bg-[#1A4750] focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold"
+            className="w-full py-2  bg-forest text-white rounded-md hover:bg-[#1A4750] focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold"
           >
             Register
           </button>

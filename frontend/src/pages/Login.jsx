@@ -20,7 +20,7 @@ export default function Login() {
           <div className="form-group">
             <label
               htmlFor="email"
-              className="block mb-2 text-gray-700 font-semibold"
+              className="block mb-2 text-gray-700 font-semibold ml-1"
             >
               Email
             </label>
@@ -28,13 +28,13 @@ export default function Login() {
               type="email"
               id="email"
               placeholder="Email"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-1 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-left"
             />
           </div>
           <div className="form-group">
             <label
               htmlFor="password"
-              className="block mb-2 text-gray-700 font-semibold"
+              className="block mb-2 text-gray-700 font-semibold ml-1"
             >
               Password
             </label>
@@ -42,7 +42,7 @@ export default function Login() {
               type="password"
               id="password"
               placeholder="Password"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-1 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-left"
             />
           </div>
           <button
