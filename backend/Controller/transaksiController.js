@@ -9,9 +9,9 @@ const getAllTransaksiByPemilikId = async (req, res) => {
   try {
     const transaksi = await Transaksi.findAll({
       include: {
-        model: Kost,
-        as: 'kost',
-        attributes: ['id', 'nama_kost'],
+        model: rumah,
+        as: 'rumah',
+        attributes: ['id', 'nama_rumah'],
         where: { id_user: id_user },
       },
       order: [['status', 'ASC']],
@@ -60,7 +60,7 @@ const createTransaksi = async (req, res) => {
     }
 
     if (!rumah) {
-      return res.status(404).json({ message: 'Kost not found' });
+      return res.status(404).json({ message: 'rumah not found' });
     }
 
     const newTransaksi = await Transaksi.create({

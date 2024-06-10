@@ -349,13 +349,13 @@ const deleteImage = async (req, res) => {
       return res.status(400).json({ message: 'Public ID tidak ditemukan' });
     }
 
-    // Ambil data detail kost dari database
+    // Ambil data detail rumah dari database
     const detailRumahData = await detailRumah.findOne({
       where: { id_rumah: id },
       raw: true,
     });
 
-    // Validasi jika kost tidak ditemukan
+    // Validasi jika rumah tidak ditemukan
     if (!detailRumahData) {
       return res.status(404).json({ message: 'Rumah tidak ditemukan' });
     }
@@ -378,7 +378,7 @@ const deleteImage = async (req, res) => {
     // Hapus public_id dari array public_id
     const updatedPublicIds = detailRumahData.public_id.filter((pid) => pid !== public_id);
 
-    // Perbarui data detail kost di database
+    // Perbarui data detail rumah di database
     await detailRumah.update(
       {
         gambar: updatedGambar,
