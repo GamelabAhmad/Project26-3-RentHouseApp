@@ -9,7 +9,7 @@ const getAllTransaksiByPemilikId = async (req, res) => {
   try {
     const transaksi = await Transaksi.findAll({
       include: {
-        model: rumah,
+        model: Rumah,
         as: 'rumah',
         attributes: ['id', 'nama_rumah'],
         where: { id_user: id_user },
