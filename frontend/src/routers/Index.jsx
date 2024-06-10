@@ -3,6 +3,7 @@ import App from "../App";
 import ErrorPage from "../components/ErrorPage";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import ProductDetail from "../pages/ProductDetail"; // Import the ProductDetail component
 
 export const router = createBrowserRouter([
   {
@@ -17,5 +18,9 @@ export const router = createBrowserRouter([
   {
     path: "/register",
     element: <Register />,
+  },
+  {
+    path: "/product/:productId", // Add the route for ProductDetail
+    element: <ProductDetail />,
   },
 ]);
