@@ -24,6 +24,14 @@ const User = db.define(
     nomor_telp: {
       type: DataTypes.STRING,
     },
+    nama_bank: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    nomor_rekening: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     role: {
       type: DataTypes.ENUM('pemilik', 'penyewa', 'admin'),
       defaultValue: 'penyewa',
@@ -35,23 +43,4 @@ const User = db.define(
   }
 );
 
-const Rekening = db.define('tbl_rekening', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  nomor_rekening: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  nama_bank: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-});
-
-User.hasOne(Rekening, { as: 'rekening', foreignKey: 'id_user' });
-Rekening.belongsTo(User, { foreignKey: 'id_user' });
-
-module.exports = { User, Rekening };
+module.exports = { User };

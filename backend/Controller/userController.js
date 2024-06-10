@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { User, Rekening } = require('../Models/userModel');
+const { User } = require('../Models/userModel');
 const { google } = require('googleapis');
 const oauth2Client = require('../middleware/authGoogle');
 
@@ -32,15 +32,11 @@ const register = async (req, res) => {
       fullname,
       nomor_telp,
       role,
+      nama_bank,
+      nomor_rekening,
     });
 
     if (user) {
-      await Rekening.create({
-        id_user: user.id,
-        nama_bank,
-        nomor_rekening,
-      });
-
       return res.status(201).json({
         status: 'success',
         message: 'Register success',

@@ -7,7 +7,7 @@ const Rating = require('./Models/ratingModel');
 const ratingRoutes = require('./Routes/ratingRoutes');
 const Transaksi = require('./Models/transaksiModel');
 const { Rumah, detailRumah } = require('./Models/rumahModel');
-const { User, Rekening } = require('./Models/userModel');
+const { User } = require('./Models/userModel');
 const app = express();
 
 app.use(express.json());
@@ -23,7 +23,6 @@ app.use('/api/rating', ratingRoutes);
 app.listen(4000, () => {
   console.log('Server is running on port 4000');
   User.sync();
-  Rekening.sync();
   Rumah.sync();
   detailRumah.sync();
   Transaksi.sync();

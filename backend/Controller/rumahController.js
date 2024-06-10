@@ -71,7 +71,7 @@ const createRumah = async (req, res) => {
 
       await detailRumah.create(
         {
-          id_kost: kost.id,
+          id_rumah: rumah.id,
           harga_sewa: harga_sewa,
           jumlah_kamar_mandi: jumlah_kamar_mandi,
           jumlah_kamar_tidur: jumlah_kamar_tidur,
@@ -167,7 +167,7 @@ const searchRumah = async (req, res) => {
       },
       include: [
         {
-          model: detailKost,
+          model: detailRumah,
           attributes: ['harga_sewa', 'jumlah_kamar_tidur', 'jumlah_kamar_mandi', 'fasilitas', 'peraturan', 'gambar'],
           as: 'detail',
         },
@@ -185,7 +185,7 @@ const searchRumah = async (req, res) => {
 
     res.status(200).json(rumah);
   } catch (error) {
-    res.status(500).json({ message: 'server error' });
+    res.status(500).json({ message: error.message });
   }
 };
 
