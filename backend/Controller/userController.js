@@ -89,13 +89,14 @@ const login = async (req, res) => {
       id: user.id,
       fullname: user.fullname,
       email: user.email,
+      role: user.role,
       token: token,
     },
   });
 };
 
 const getUserById = async (req, res) => {
-  const id_user = jwt.decode(req.cookies.token).id;
+  const id_user = req.params.id;
   const user = await User.findByPk(id_user, {
     attributes: ['id', 'email', 'fullname', 'nomor_telp'],
   });
@@ -110,7 +111,7 @@ const getUserById = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const { email, fullname, nomor_telp, password, nomor_rekening, nama_bank } = req.body;
-    const id_user = jwt.decode(req.cookies.token).id;
+    const id_user = req.params.id;
     const user = await User.findOne({ where: { id: id_user } });
     if (!user) return res.status(404).json({ message: 'User not found' });
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -118,12 +119,9 @@ const updateUser = async (req, res) => {
     user.email = email || user.email;
     user.fullname = fullname || user.fullname;
     user.nomor_telp = nomor_telp || user.nomor_telp;
+    user.nama_bank = nama_bank || user.nama_bank;
+    user.nomor_rekening = nomor_rekening || user.nomor_rekening;
     await user.save();
-
-    const rekening = await Rekening.findOne({ where: { id_user: id_user } });
-    rekening.nomor_rekening = nomor_rekening || rekening.nomor_rekening;
-    rekening.nama_bank = nama_bank || rekening.nama_bank;
-    await rekening.save();
     res.status(200).json({ message: 'User updated successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });

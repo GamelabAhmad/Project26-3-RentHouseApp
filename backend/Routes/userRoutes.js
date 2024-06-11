@@ -7,7 +7,7 @@ const verify = require('../middleware/verify');
 router.post('/login', userController.login);
 router.post('/register', userController.register);
 router.get('/:id', userController.getUserById);
-router.put('/edit/', verify.verifyToken, userController.updateUser);
+router.put('/edit/:id', verify.verifyToken, userController.updateUser);
 
 //login Google
 router.get('/auth/google', userController.loginWithGoogle);

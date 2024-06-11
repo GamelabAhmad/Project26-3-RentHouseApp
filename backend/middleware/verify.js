@@ -6,6 +6,8 @@ const verifyToken = (req, res, next) => {
     const token = authHeader.split(' ')[1];
     jwt.verify(token, 'secret', (err, user) => {
       if (err) res.status(403).json('Token is not valid!');
+      if (user.role) {
+      }
       req.user = user;
       next();
     });
@@ -15,13 +17,20 @@ const verifyToken = (req, res, next) => {
 };
 
 const verifyIsPemilik = (req, res, next) => {
-  verifyToken(req, res, next, () => {
-    if (req.user.role === 'pemilik') {
+  const authHeader = req.headers.authorization;
+  if (authHeader) {
+    const token = authHeader.split(' ')[1];
+    jwt.verify(token, 'secret', (err, user) => {
+      if (err) res.status(403).json('Token is not valid!');
+      if (user.role !== 'pemilik') {
+        return res.status(403).json('You are not pemilik!');
+      }
+      req.user = user;
       next();
-    } else {
-      res.status(403).json('You are not pemilik!');
-    }
-  });
+    });
+  } else {
+    return res.status(401).json('You are not authenticated!');
+  }
 };
 
 module.exports = { verifyToken, verifyIsPemilik };
