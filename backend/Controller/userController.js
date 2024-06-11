@@ -24,15 +24,24 @@ const register = async (req, res) => {
       });
     }
 
+    const checkName = await User.findOne({ where: { fullname } });
+    if (checkName) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Name already exist',
+      });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     if (role === 'pemilik') {
       if (!nama_bank || !nomor_rekening) {
         return res.status(400).json({
           status: 'error',
-          message: 'All fields are required',
+          message: 'nama bank and nomor rekening are required',
         });
       }
+
       const user = await User.create({
         email,
         password: hashedPassword,
@@ -55,75 +64,81 @@ const register = async (req, res) => {
           nomor_rekening,
         },
       });
-    } else {
-      const user = await User.create({
+    }
+
+    const user = await User.create({
+      email,
+      password: hashedPassword,
+      fullname,
+      nomor_telp,
+      role,
+    });
+
+    return res.status(201).json({
+      status: 'success',
+      message: 'Register success',
+      data: {
+        id: user.id,
         email,
-        password: hashedPassword,
         fullname,
         nomor_telp,
         role,
-        nama_bank,
-        nomor_rekening,
-      });
-
-      return res.status(201).json({
-        status: 'success',
-        message: 'Register success',
-        data: {
-          id: user.id,
-          email,
-          fullname,
-          nomor_telp,
-          role,
-        },
-      });
-    }
+      },
+    });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
 };
 
-
-
 const login = async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({ where: { email } });
+  try {
+    if (!email || !password) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'All fields are required',
+      });
+    }
+    const user = await User.findOne({ where: { email } });
 
-  if (!user) {
-    return res.status(400).json({
-      status: 'error',
-      message: 'password salah atau email tidak terdaftar',
+    if (!user) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'password salah atau email tidak terdaftar',
+      });
+    }
+
+    const checkPassword = await bcrypt.compare(password, user.password);
+
+    if (!checkPassword) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'password salah atau email tidak terdaftar',
+      });
+    }
+
+    const token = jwt.sign({ id: user.id, email: user.email, role: user.role, fullname: user.fullname }, 'secret', { expiresIn: '1d' });
+
+    res.cookie('token', token, {
+      maxAge: 1000 * 60 * 60 * 24,
+      httpOnly: true,
     });
-  }
 
-  const checkPassword = await bcrypt.compare(password, user.password);
-
-  if (!checkPassword) {
-    return res.status(400).json({
-      status: 'error',
-      message: 'password salah atau email tidak terdaftar',
+    return res.status(200).json({
+      status: 'success',
+      message: 'Login success',
+      data: {
+        id: user.id,
+        fullname: user.fullname,
+        email: user.email,
+        role: user.role,
+        token: token,
+      },
     });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
   }
-
-  const token = jwt.sign({ id: user.id, email: user.email, role: user.role, fullname: user.fullname }, 'secret', { expiresIn: '1d' });
-
-  res.cookie('token', token, {
-    maxAge: 1000 * 60 * 60 * 24,
-    httpOnly: true,
-  });
-
-  return res.status(200).json({
-    status: 'success',
-    message: 'Login success',
-    data: {
-      id: user.id,
-      fullname: user.fullname,
-      email: user.email,
-      role: user.role,
-      token: token,
-    },
-  });
 };
 
 const getUserById = async (req, res) => {
