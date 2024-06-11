@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 export default function LandingPage() {
   return (
@@ -18,12 +17,12 @@ export default function LandingPage() {
             Solusi Mudah Sewa Rumah Idaman Anda
           </p>
         </div>
-        <Link
-          to="#home"
+        <a
+          href="#about"
           className="px-6 shadow uppercase py-4 bg-forest text-white rounded-lg cari-rumah-button transition duration-200 font-semibold"
         >
           Cari Rumah Sekarang
-        </Link>
+        </a>
       </main>
     </section>
   );

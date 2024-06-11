@@ -1,14 +1,9 @@
 import React from "react";
-import Navbar from "./Navbar";
 
 const AboutRentHouse = () => {
   return (
     <>
-      <Navbar hideNavbar={true} />
-      <section
-        id="about"
-        className="bg-white py-12 font-spartan rounded-lg mt-8"
-      >
+      <section id="about" className="bg-white py-32 font-spartan rounded-lg">
         <div className="container mx-auto px-4 md:px-8">
           <div className="text-center">
             <h2 className="text-4xl font-bold text-forest mb-4">

@@ -1,6 +1,5 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import Navbar from "./Navbar";
 
 const ProductSection = () => {
   const products = [
@@ -52,7 +51,6 @@ const ProductSection = () => {
 
   return (
     <>
-      <Navbar hideNavbar={true} />
       <section id="Product-Card">
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

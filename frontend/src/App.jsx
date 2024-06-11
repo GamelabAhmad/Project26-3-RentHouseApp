@@ -6,7 +6,7 @@ import Footer from "./components/Footer";
 
 function App() {
   return (
-    <div className="h-[2000px]">
+    <div>
       <LandingPage />
       <Navbar />
       <AboutRentHouse />

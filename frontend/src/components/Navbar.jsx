@@ -1,11 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaShoppingBag } from "react-icons/fa";
-import { IoIosLogIn } from "react-icons/io";
+import { RiLoginBoxLine, RiLogoutBoxLine } from "react-icons/ri";
 import { NavLink } from "react-router-dom";
 
-const Navbar = ({ hideNavbar }) => {
-  if (hideNavbar) {
-    return null;
+export default function Navbar() {
+  const [showDropdown, setShowDropdown] = useState(false);
+  const fullName = localStorage.getItem("fullname");
+  const loggedIn = fullName ? fullName.split(" ")[0] : "";
+
+  function handleLogout() {
+    localStorage.removeItem("fullname");
+    localStorage.removeItem("token");
+    window.location.reload();
   }
 
   return (
@@ -24,12 +30,34 @@ const Navbar = ({ hideNavbar }) => {
           <NavLink to="#contact" className="text-white p-2 text-lg font-medium">
             Contact
           </NavLink>
-          <NavLink
-            to="/login"
-            className="text-white flex p-2 text-lg font-medium items-center gap-1"
-          >
-            Login <IoIosLogIn className="font-bold" />
-          </NavLink>
+          {loggedIn ? (
+            <div className="relative">
+              <button
+                onClick={() => setShowDropdown(!showDropdown)}
+                className="text-white flex p-2 text-lg font-medium items-center gap-1 focus:outline-none"
+              >
+                {loggedIn}
+                <RiLogoutBoxLine className="font-bold" />
+              </button>
+              {showDropdown && (
+                <div className="absolute top-10 right-2 bg-white border border-gray-300 shadow-md rounded-md overflow-hidden">
+                  <span
+                    onClick={handleLogout}
+                    className="px-4 py-1 block cursor-pointer bg-white hover:bg-secondary font-semibold transition-all duration-100 text-gray-800"
+                  >
+                    Logout
+                  </span>
+                </div>
+              )}
+            </div>
+          ) : (
+            <NavLink
+              to="/login"
+              className="text-white flex p-2 text-lg font-medium items-center gap-1"
+            >
+              Login <RiLoginBoxLine className="font-bold" />
+            </NavLink>
+          )}
           <NavLink
             to="/cart"
             className="text-[#daa520] p-2 text-lg font-medium flex items-center mb-1"
@@ -40,6 +68,4 @@ const Navbar = ({ hideNavbar }) => {
       </div>
     </nav>
   );
-};
-
-export default Navbar;
+}
