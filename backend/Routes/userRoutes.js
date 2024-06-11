@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../Controller/userController');
-const oauth2Client = require('../middleware/authGoogle');
 const verify = require('../middleware/verify');
 
 router.post('/login', userController.login);
 router.post('/register', userController.register);
-router.get('/:id', userController.getUserById);
+router.get('/:id', verify.verifyToken, userController.getUserById);
 router.put('/edit/:id', verify.verifyToken, userController.updateUser);
 
 //login Google

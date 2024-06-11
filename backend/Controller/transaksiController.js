@@ -1,11 +1,10 @@
 const Transaksi = require('../Models/transaksiModel');
 const { Rumah, detailRumah } = require('../Models/rumahModel');
 const { User } = require('../Models/userModel');
-const jwt = require('jsonwebtoken');
 
 // Mendapatkan semua transaksi
 const getAllTransaksiByPemilikId = async (req, res) => {
-  const id_user = jwt.decode(req.cookies.token).id;
+  const id_user = req.user.id;
   try {
     const transaksi = await Transaksi.findAll({
       include: {
@@ -29,7 +28,7 @@ const getAllTransaksiByPemilikId = async (req, res) => {
 
 // Mendapatkan transaksi berdasarkan ID user
 const getTransaksiByIdUser = async (req, res) => {
-  const id = jwt.decode(req.cookies.token).id;
+  const { id } = req.params;
   try {
     const userTransaction = await Transaksi.findAll({
       where: { id_user: id },
@@ -45,7 +44,7 @@ const getTransaksiByIdUser = async (req, res) => {
 
 // Membuat transaksi baru
 const createTransaksi = async (req, res) => {
-  const id_user = jwt.decode(req.cookies.token).id;
+  const id_user = req.user.id;
   try {
     const user = await User.findOne({ where: { id: id_user } });
     if (!user) {
@@ -79,7 +78,7 @@ const createTransaksi = async (req, res) => {
 // Memperbarui transaksi berdasarkan ID
 const updateTransaksi = async (req, res) => {
   const { id } = req.params;
-  const id_user = jwt.decode(req.cookies.token).id;
+  const id_user = req.user.id;
 
   try {
     const transaksi = await Transaksi.findOne({ where: { id: id }, include: [{ model: Rumah, as: 'rumah', where: { id_user: id_user } }] });

@@ -26,6 +26,37 @@ const register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    if (role === 'pemilik') {
+      if (!nama_bank || !nomor_rekening) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'All fields are required',
+        });
+      }
+      const user = await User.create({
+        email,
+        password: hashedPassword,
+        fullname,
+        nomor_telp,
+        role,
+        nama_bank,
+        nomor_rekening,
+      });
+      res.status(201).json({
+        status: 'success',
+        message: 'Register success',
+        data: {
+          id: user.id,
+          email,
+          fullname,
+          nomor_telp,
+          role,
+          nama_bank,
+          nomor_rekening,
+        },
+      });
+    }
+
     const user = await User.create({
       email,
       password: hashedPassword,
@@ -96,8 +127,8 @@ const login = async (req, res) => {
 };
 
 const getUserById = async (req, res) => {
-  const id_user = req.params.id;
-  const user = await User.findByPk(id_user, {
+  const { id } = req.params;
+  const user = await User.findByPk(id, {
     attributes: ['id', 'email', 'fullname', 'nomor_telp'],
   });
 
@@ -111,8 +142,8 @@ const getUserById = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const { email, fullname, nomor_telp, password, nomor_rekening, nama_bank } = req.body;
-    const id_user = req.params.id;
-    const user = await User.findOne({ where: { id: id_user } });
+    const { id } = req.params;
+    const user = await User.findOne({ where: { id: id } });
     if (!user) return res.status(404).json({ message: 'User not found' });
     const hashedPassword = await bcrypt.hash(password, 10);
     user.password = hashedPassword || user.password;

@@ -5,8 +5,8 @@ const cloudinary = require('../middleware/cloudinary');
 const Rating = require('../Models/ratingModel');
 
 const createRumah = async (req, res) => {
-  const id_user = jwt.decode(req.cookies.token).id;
-  const nama = jwt.decode(req.cookies.token).fullname;
+  const id_user = req.user.id;
+  const nama = req.user.fullname;
   const { nama_rumah, alamat, kota, kecamatan, deskripsi, fasilitas, peraturan, harga_sewa, jumlah_kamar_tidur, jumlah_kamar_mandi } = req.body;
 
   try {
@@ -229,7 +229,7 @@ const getRumahByKota = async (req, res) => {
 const updateRumah = async (req, res) => {
   const { id } = req.params;
   const { nama_rumah, alamat, kota, kecamatan, deskripsi, harga_sewa, jumlah_kamar_mandi, jumlah_kamar_tidur, fasilitas, peraturan } = req.body;
-  const id_user = jwt.decode(req.cookies.token).id;
+  const id_user = req.user.id;
 
   try {
     const rumah = await Rumah.findOne({ where: { id: id, id_user: id_user }, include: { model: detailRumah, as: 'detail' } });
@@ -313,7 +313,7 @@ const updateRumah = async (req, res) => {
 const deleteRumah = async (req, res) => {
   try {
     const { id } = req.params;
-    const id_user = jwt.decode(req.cookies.token).id;
+    const id_user = req.user.id;
     const rumah = await Rumah.findOne({ where: { id: id, id_user: id_user } });
     if (!rumah) {
       return res.status(404).json({ message: 'rumah tidak ditemukan' });
@@ -321,18 +321,15 @@ const deleteRumah = async (req, res) => {
 
     const detail = await detailRumah.findOne({ where: { id_rumah: rumah.id } });
 
-    if (detail) {
-      detail.public_id.map(async (public_id) => {
-        // Menggunakan cloudinary.uploader.destroy untuk menghapus gambar dari Cloudinary
-        await cloudinary.uploader.destroy(public_id, (error, result) => {
-          if (error) {
-            console.error(error);
-          }
-        });
+    detail.public_id.map(async (public_id) => {
+      // Menggunakan cloudinary.uploader.destroy untuk menghapus gambar dari Cloudinary
+      await cloudinary.uploader.destroy(public_id, (error, result) => {
+        if (error) {
+          console.error(error);
+        }
       });
-      await detail.destroy();
-    }
-
+    });
+    await detail.destroy();
     await rumah.destroy();
     res.status(200).json({ msg: 'rumah berhasil dihapus' });
   } catch (error) {

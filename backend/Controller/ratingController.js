@@ -6,7 +6,12 @@ const jwt = require('jsonwebtoken');
 const createRating = async (req, res) => {
   try {
     const { id_rumah, rating, review } = req.body;
-    const id_user = jwt.decode(req.cookies.token).id;
+    const id_user = req.user.id;
+
+    const cekRumah = await Rumah.findOne({ where: { id: id_rumah } });
+    if (!cekRumah) {
+      return res.status(404).json({ message: 'Rumah not found' });
+    }
 
     const transaction = await Transaksi.findOne({
       where: {
@@ -34,7 +39,7 @@ const createRating = async (req, res) => {
 };
 
 const getRatingByUserId = async (req, res) => {
-  const id = jwt.decode(req.cookies.token).id;
+  const { id } = req.params;
   try {
     const rating = await Rating.findAll({
       where: { id_user: id },
@@ -49,7 +54,7 @@ const getRatingByUserId = async (req, res) => {
 const updateRating = async (req, res) => {
   const { id } = req.params;
   const { rating, review } = req.body;
-  const id_user = jwt.decode(req.cookies.token).id;
+  const id_user = req.user.id;
   try {
     const ratingUser = await Rating.findOne({
       where: { id: id, id_user: id_user },
