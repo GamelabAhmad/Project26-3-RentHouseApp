@@ -63,13 +63,17 @@ export default function Register() {
           <AiOutlineArrowLeft size={24} />
         </NavLink>
         <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-slate-950">Register</h2>
+          <h2 className="text-3xl uppercase font-bold text-forest">Register</h2>
           <p className="text-gray-700">Create a new account</p>
         </div>
         <form className="space-y-4" onSubmit={handleRegister}>
-          {error && <p className="text-red-500 text-lg uppercase">{error}</p>}
+          {error && (
+            <p className="text-red-500 text-lg font-bold uppercase">{error}</p>
+          )}
           {successMessage && (
-            <p className="text-green-500 text-lg uppercase">{successMessage}</p>
+            <p className="text-green-500 text-lg font-bold uppercase">
+              {successMessage}
+            </p>
           )}
           <div className="form-group">
             <label
