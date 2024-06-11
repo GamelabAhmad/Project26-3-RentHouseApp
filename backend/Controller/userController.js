@@ -62,6 +62,8 @@ const register = async (req, res) => {
         fullname,
         nomor_telp,
         role,
+        nama_bank,
+        nomor_rekening,
       });
 
       return res.status(201).json({
@@ -80,6 +82,7 @@ const register = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
 
 
 const login = async (req, res) => {
