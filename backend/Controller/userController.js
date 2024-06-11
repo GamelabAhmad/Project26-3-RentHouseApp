@@ -42,7 +42,7 @@ const register = async (req, res) => {
         nama_bank,
         nomor_rekening,
       });
-      res.status(201).json({
+      return res.status(201).json({
         status: 'success',
         message: 'Register success',
         data: {
@@ -55,19 +55,17 @@ const register = async (req, res) => {
           nomor_rekening,
         },
       });
-    }
+    } else {
+      const user = await User.create({
+        email,
+        password: hashedPassword,
+        fullname,
+        nomor_telp,
+        role,
+        nama_bank,
+        nomor_rekening,
+      });
 
-    const user = await User.create({
-      email,
-      password: hashedPassword,
-      fullname,
-      nomor_telp,
-      role,
-      nama_bank,
-      nomor_rekening,
-    });
-
-    if (user) {
       return res.status(201).json({
         status: 'success',
         message: 'Register success',
@@ -84,6 +82,8 @@ const register = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+
 
 const login = async (req, res) => {
   const { email, password } = req.body;
