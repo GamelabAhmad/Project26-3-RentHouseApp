@@ -1,8 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { AiOutlineArrowLeft } from "react-icons/ai";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    // Contoh: cek apakah email dan password yang dimasukkan adalah "admin"
+    if (email === "admin" && password === "admin") {
+      // Jika login berhasil, tampilkan pesan toast "Login berhasil"
+      toast.success("Login berhasil");
+    } else {
+      // Jika login gagal, tampilkan pesan toast "Login gagal"
+      toast.error("Login gagal");
+    }
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-white font-spartan">
       <div className="relative bg-white p-8 rounded-lg w-full max-w-md md:max-w-lg">
@@ -16,7 +34,7 @@ export default function Login() {
           <h2 className="text-2xl font-bold text-slate-950">Login</h2>
           <p className="text-gray-700">Welcome, Please enter your details</p>
         </div>
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleLogin}>
           <div className="form-group">
             <label
               htmlFor="email"
@@ -28,7 +46,9 @@ export default function Login() {
               type="email"
               id="email"
               placeholder="Email"
-              className="w-full px-1 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-left"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-left"
             />
           </div>
           <div className="form-group">
@@ -42,7 +62,9 @@ export default function Login() {
               type="password"
               id="password"
               placeholder="Password"
-              className="w-full px-1 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-left"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-left"
             />
           </div>
           <button
@@ -59,6 +81,7 @@ export default function Login() {
           </p>
         </form>
       </div>
+      <ToastContainer /> {/* Container untuk menampilkan pesan toast */}
     </div>
   );
 }

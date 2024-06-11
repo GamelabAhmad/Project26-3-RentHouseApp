@@ -2,8 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import ErrorPage from "../components/ErrorPage";
 import Login from "../pages/Login";
+import ProductDetail from "../pages/ProductDetail";
 import Register from "../pages/Register";
-import ProductDetail from "../pages/ProductDetail"; // Import the ProductDetail component
 
 export const router = createBrowserRouter([
   {
@@ -20,7 +20,7 @@ export const router = createBrowserRouter([
     element: <Register />,
   },
   {
-    path: "/product/:productId", // Add the route for ProductDetail
+    path: "/product/:productId",
     element: <ProductDetail />,
   },
 ]);

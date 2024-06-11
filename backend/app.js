@@ -8,8 +8,10 @@ const ratingRoutes = require('./Routes/ratingRoutes');
 const Transaksi = require('./Models/transaksiModel');
 const { Rumah, detailRumah } = require('./Models/rumahModel');
 const { User } = require('./Models/userModel');
+const cors = require('cors');
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
