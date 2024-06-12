@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { AiOutlineArrowLeft } from "react-icons/ai";
+import {
+  AiOutlineArrowLeft,
+  AiOutlineEye,
+  AiOutlineEyeInvisible,
+} from "react-icons/ai";
 import { NavLink, useNavigate } from "react-router-dom";
 
 export default function Register() {
@@ -14,6 +18,8 @@ export default function Register() {
   const [error, setError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // State untuk menampilkan atau menyembunyikan password
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State untuk menampilkan atau menyembunyikan confirm password
   const navigate = useNavigate();
 
   async function handleRegister(e) {
@@ -52,7 +58,7 @@ export default function Register() {
       setError(`register failed: ${error.message}`);
     }
   }
-  console.log(fullname, email, password, confirmPassword);
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-white font-spartan">
       <div className="relative bg-white p-8 rounded-lg w-full max-w-md md:max-w-lg">
@@ -181,7 +187,7 @@ export default function Register() {
               value={nomorTelp}
               type="text"
               id="nomor_telp"
-              placeholder="089123456789"
+              placeholder="089123450000"
               className="w-full px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -192,14 +198,29 @@ export default function Register() {
             >
               Password
             </label>
-            <input
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
-              type="password"
-              id="password"
-              placeholder="Password"
-              className="w-full px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <div className="relative">
+              <input
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+                type={showPassword ? "text" : "password"}
+                id="password"
+                placeholder="Password"
+                className="w-full px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                type="button"
+                className="absolute top-2 right-2"
+                onMouseDown={() => setShowPassword(true)}
+                onMouseUp={() => setShowPassword(false)}
+                onMouseLeave={() => setShowPassword(false)}
+              >
+                {showPassword ? (
+                  <AiOutlineEyeInvisible size={20} />
+                ) : (
+                  <AiOutlineEye size={20} />
+                )}
+              </button>
+            </div>
           </div>
           <div className="form-group">
             <label
@@ -208,14 +229,30 @@ export default function Register() {
             >
               Confirm Password
             </label>
-            <input
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              value={confirmPassword}
-              type="password"
-              id="confirm-password"
-              placeholder="Confirm Password"
-              className="w-full px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <div className="relative">
+              <input
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                value={confirmPassword}
+                type={showConfirmPassword ? "text" : "password"}
+                id="confirm-password"
+                placeholder="Confirm Password"
+                className="w-full px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                onMouseDown={() => setShowConfirmPassword(true)}
+                onMouseUp={() => setShowConfirmPassword(false)}
+                onMouseLeave={() => setShowConfirmPassword(false)}
+                className="absolute inset-y-0 right-0 flex items-center px-2 py-1"
+              >
+                {showConfirmPassword ? (
+                  <AiOutlineEyeInvisible size={20} />
+                ) : (
+                  <AiOutlineEye size={20} />
+                )}
+              </button>
+            </div>
             {passwordError && (
               <p className="text-red-500 text-sm">{passwordError}</p>
             )}
