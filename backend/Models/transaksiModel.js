@@ -18,6 +18,7 @@ const Transaksi = db.define(
     id_rumah: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      onDelete: 'CASCADE',
     },
     jumlah_uang_dibayarkan: {
       type: DataTypes.INTEGER,

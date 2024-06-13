@@ -77,6 +77,11 @@ const detailRumah = db.define(
       type: DataTypes.JSON,
       allowNull: true,
     },
+    id_rumah: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      onDelete: 'CASCADE',
+    },
   },
   {
     freezeTableName: true,

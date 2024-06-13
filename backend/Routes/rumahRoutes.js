@@ -11,6 +11,6 @@ router.get('/:id', rumahController.getRumahById);
 router.get('/kota/query', rumahController.getRumahByKota);
 router.put('/:id', verify.verifyIsPemilik, upload.array('images'), rumahController.updateRumah);
 router.delete('/:id', verify.verifyIsPemilik, rumahController.deleteRumah);
-router.delete('/image/:id/:public_id', rumahController.deleteImage);
+router.delete('/image/:id/:public_id', verify.verifyIsPemilik, rumahController.deleteImage);
 
 module.exports = router;

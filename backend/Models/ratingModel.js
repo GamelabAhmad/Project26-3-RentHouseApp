@@ -17,7 +17,7 @@ const Rating = db.define(
     },
     id_rumah: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      onDelete: 'CASCADE',
     },
     rating: {
       type: DataTypes.INTEGER,
