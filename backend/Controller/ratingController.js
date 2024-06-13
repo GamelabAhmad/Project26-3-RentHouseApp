@@ -47,6 +47,7 @@ const getRatingByUserId = async (req, res) => {
     });
     res.status(200).json(rating);
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: error.message });
   }
 };

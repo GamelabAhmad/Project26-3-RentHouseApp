@@ -119,7 +119,6 @@ const getRumah = async (req, res) => {
     if (rumah.length === 0) {
       return res.status(404).json({ message: 'Rumah tidak ditemukan' });
     }
-
     return res.status(200).json(rumah);
   } catch (error) {
     console.error(error);
