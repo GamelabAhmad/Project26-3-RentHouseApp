@@ -99,7 +99,7 @@ const getRumah = async (req, res) => {
   try {
     const rumah = await Rumah.findAll({
       attributes: {
-        include: [[Sequelize.fn('ROUND', Sequelize.fn('AVG', Sequelize.col('rating')), 1), 'average_rating']],
+        include: [[Sequelize.fn('ROUND', Sequelize.fn('AVG', Sequelize.col('rating_rumah.rating')), 1), 'average_rating']],
       },
       include: [
         {
