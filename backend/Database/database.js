@@ -1,7 +1,8 @@
 const { Sequelize } = require('sequelize');
 
-const db = new Sequelize('rent_house', 'root', '1234', {
-  host: 'localhost',
+const db = new Sequelize('4WedGbSF4zKSpri5', 'rVdcLCqawtrnkFyB', 'LERKlH5JNVBCI4YH', {
+  host: 'educalab.id',
+  port: 3307,
   dialect: 'mysql',
   timezone: '+07:00',
   dialectOptions: {
