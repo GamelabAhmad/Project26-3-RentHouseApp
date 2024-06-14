@@ -25,7 +25,7 @@ app.use('/api/rating', ratingRoutes);
 app.use('/api/rating', ratingRoutes);
 app.use('/api/admin', adminRoutes);
 
-app.listen(4000, () => {
+app.listen(9819, () => {
   console.log('Server is running on port 4000');
   User.sync();
   Rumah.sync();
