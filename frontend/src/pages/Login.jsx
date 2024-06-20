@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 import React, { useState } from "react";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { NavLink, useNavigate } from "react-router-dom";
+=======
+import React, { useState } from 'react';
+import { AiOutlineArrowLeft, AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { NavLink, useNavigate } from 'react-router-dom';
+>>>>>>> ba1c3e84d01321e121eb0657fe718e8348b5c055
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -8,15 +14,25 @@ export default function Login() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+<<<<<<< HEAD
   const [fullname, setFullname] = useState("");
+=======
+  const [fullname, setFullname] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // State untuk menampilkan atau menyembunyikan password
+>>>>>>> ba1c3e84d01321e121eb0657fe718e8348b5c055
   const navigate = useNavigate();
 
   async function handleLogin(e) {
     e.preventDefault();
     try {
       setLoading(true);
+<<<<<<< HEAD
       const res = await fetch("http://localhost:4000/api/users/login", {
         method: "POST",
+=======
+      const res = await fetch('https://api-msib-6-rent-house-03.educalab.id/api/users/login', {
+        method: 'POST',
+>>>>>>> ba1c3e84d01321e121eb0657fe718e8348b5c055
         headers: {
           "Content-Type": "application/json",
         },
@@ -77,21 +93,31 @@ export default function Login() {
               className="w-full py-1 px-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-forest text-left"
             />
           </div>
+<<<<<<< HEAD
           <div className="form-group">
             <label
               htmlFor="password"
               className="block mb-2 text-gray-700 font-semibold ml-1"
             >
+=======
+          <div className="form-group relative">
+            <label htmlFor="password" className="block mb-2 text-gray-700 font-semibold ml-1">
+>>>>>>> ba1c3e84d01321e121eb0657fe718e8348b5c055
               Password
             </label>
-            <input
-              type="password"
-              id="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-2 py-1 border rounded-md focus:outline-none focus:ring-1 focus:ring-forest text-left"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                id="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-2 py-1 border rounded-md focus:outline-none focus:ring-1 focus:ring-forest text-left"
+              />
+              <button type="button" className="absolute top-2 right-2" onMouseDown={() => setShowPassword(true)} onMouseUp={() => setShowPassword(false)} onMouseLeave={() => setShowPassword(false)}>
+                {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
+              </button>
+            </div>
           </div>
           <button
             type="submit"
